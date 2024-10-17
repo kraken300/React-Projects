@@ -7,6 +7,7 @@ function App() {
   const [todo, setTodo] = useState("");
   const [editTodo, setEditTodo] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
+  const [isDone, setIsDone] = useState(false);
 
   const handleAddTodo = () => {
     if (todo.trim()) {
@@ -36,6 +37,7 @@ function App() {
   }
 
   console.log(todos);
+  console.log(isDone);
 
   return (
     <div>
@@ -47,11 +49,16 @@ function App() {
 
       {
         todos.length > 0 ?
-          todos.map((todoItem, index) => <div key={index}>
-            <p>{todoItem}</p>
-            <button onClick={() => handleEditTodo(index)}>Edit</button>
-            <button onClick={() => handleDeleteTodo(index)}>Delete</button>
-          </div>)
+          todos.map((todoItem, index) =>
+            <div key={index}>
+              {isDone ? <s><p style={{ color: "red" }}>{todoItem}</p></s> : <p>{todoItem}</p>}
+              <button onClick={() => handleEditTodo(index)}>Edit</button>
+              <button onClick={() => handleDeleteTodo(index)}>Delete</button>
+              <input type="checkbox"
+                checked={isDone}
+                onChange={() => setIsDone(!isDone)}
+              />
+            </div>)
           : <div>No todo</div>
       }
 
