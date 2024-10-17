@@ -1,11 +1,11 @@
 import React from 'react'
 import { useTodo } from '../context/TodoContext'
 import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdDoneOutline } from "react-icons/md";
 
 function Todo() {
 
-    const { todos, deleteTodo, editTodo, editIndex, newTodo, setNewTodo, updateTodo } = useTodo();
+    const { todos, deleteTodo, editTodo, editIndex, newTodo, setNewTodo, updateTodo, handleCheck } = useTodo();
 
     console.log(todos);
     return (
@@ -41,11 +41,18 @@ function Todo() {
                     todos.length > 0 ?
                         todos.map((todo, index) =>
                             <div key={index} className='border-2 border-gray-300 rounded-lg p-4 text-white bg-gray-800 min-w-[300px] sm:min-w-[300px] lg:min-w-[260px]'>
-                                <p className='font-bold text-2xl'>{todo.title}</p>
-                                <p>{todo.content}</p>
-                                <p className='mb-1'>Last updated: {todo.date}</p>
-                                <button onClick={() => editTodo(index)}><FaEdit /></button>
-                                <button onClick={() => deleteTodo(index)}><MdDelete /></button>
+                                <p className={`${todo.isDone ? "text-red-400 font-bold text-2xl line-through" : "font-bold text-2xl"}`}>{todo.title}</p>
+                                <p className={`${todo.isDone ? "text-red-400 line-through" : ""}`}>{todo.content}</p>
+                                <p className={`${todo.isDone ? "text-red-400 mb-1 line-through" : "mb-1"}`}>Last updated: {todo.date}</p>
+                                <div className='flex items-center text-xl'>
+                                    <button onClick={() => editTodo(index)} disabled={todo.isDone}><FaEdit /></button>
+                                    <button onClick={() => deleteTodo(index)} disabled={todo.isDone}><MdDelete /></button>
+                                    <input
+                                        type="checkbox"
+                                        checked={todo.isDone}
+                                        onChange={() => handleCheck(index)}
+                                    />
+                                </div>
                             </div>)
                         :
                         <div className='col-span-1 sm:col-span-2 lg:col-span-4 flex items-center justify-center'>

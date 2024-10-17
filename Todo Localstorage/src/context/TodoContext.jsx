@@ -5,19 +5,16 @@ export const TodoContext = createContext();
 export const TodoProvider = ({ children }) => {
 
     const [todos, setTodos] = useState([]);
-
     const [todo, setTodo] = useState(
         { title: "", content: "" }
     );
-
     const [newTodo, setNewTodo] = useState(
         { title: "", content: "" }
     );
-
     const [editIndex, setEditIndex] = useState(null);
 
     const addTodo = (todo, date) => {
-        const addingTodo = { ...todo, date };
+        const addingTodo = { ...todo, date, isDone: false };
         if (todo.title.trim() && todo.content.trim()) {
             setTodos(prevTodos => {
                 const updatedTodos = [...prevTodos, addingTodo];
@@ -52,6 +49,19 @@ export const TodoProvider = ({ children }) => {
         localStorage.setItem("todoitems", JSON.stringify(updatedTodos));
     }
 
+    const handleCheck = (index) => {
+        const updatedTodos = todos.map((todo, i) => {
+            if (i === index) {
+                return { ...todo, isDone: !todo.isDone };
+            }
+            else {
+                return todo;
+            }
+        });
+        setTodos(updatedTodos);
+        localStorage.setItem("todoitems", JSON.stringify(updatedTodos));
+    }
+
     useEffect(() => {
         const getSavedTodos = JSON.parse(localStorage.getItem("todoitems")) || [];
         setTodos(getSavedTodos);
@@ -64,11 +74,10 @@ export const TodoProvider = ({ children }) => {
     // }, [todos])
 
     return (
-        <TodoContext.Provider value={{ todos, todo, setTodo, newTodo, setNewTodo, editIndex, addTodo, editTodo, updateTodo, deleteTodo }}>
+        <TodoContext.Provider value={{ todos, todo, setTodo, newTodo, setNewTodo, editIndex, addTodo, editTodo, updateTodo, deleteTodo, handleCheck }}>
             {children}
         </TodoContext.Provider>
     )
-
 }
 
 export const useTodo = () => {
