@@ -1,13 +1,15 @@
 import React from "react";
 import { useTodo } from "../context/TodoContext";
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 function AddTodo() {
 
-    const { todo, setTodo, addTodo } = useTodo();
+    const { todo, setTodo, addTodo, loading } = useTodo();
 
-    const handleAddTodo = async(e) => {
+    const handleAddTodo = (e) => {
         e.preventDefault();
-        await addTodo(todo);
+        addTodo(todo);
         setTodo({
             title: "",
             content: ""
@@ -38,6 +40,7 @@ function AddTodo() {
                         type="submit"
                         onClick={handleAddTodo}
                         className="rounded bg-green-500 px-2 py-3 hover:bg-green-600 active:bg-green-400 font-bold"
+                         disabled={loading}
                     >Add Todo</button>
                 </div>
             </form>

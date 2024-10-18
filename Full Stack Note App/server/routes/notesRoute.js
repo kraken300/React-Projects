@@ -1,8 +1,8 @@
 import express from "express";
-//Create a Local Router
 const router = express.Router();
 import { getNote, addNote, updateNote, deleteNote } from "../controller/noteController.js";
 
+//Routes
 // 1
 // router.route("/").get(getNote);
 // router.route("/addnote").post(addNote); 

@@ -5,11 +5,12 @@ import { MdDelete } from "react-icons/md";
 
 function Todo() {
 
-    const { todos, deleteTodo, editTodo, newTodo, setNewTodo, updateTodo,id } = useTodo();
+    const { todos, deleteTodo, editTodo, newTodo, setNewTodo, updateTodo, id, loading } = useTodo();
 
     console.log(todos);
     return (
         <>
+            {loading && <div className='text-white text-4xl'>Loading...</div>}
             {id !== null &&
                 <div className='flex flex-col justify-center items-center gap-4'>
                     <input
@@ -36,17 +37,29 @@ function Todo() {
                     </div>
                 </div>
             }
+
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
                 {
                     todos.length > 0 ?
                         todos.map((todo, index) =>
-                            <div key={todo._id} className='border-2 border-gray-300 rounded-lg p-4 text-white bg-gray-800 min-w-[300px] sm:min-w-[300px] lg:min-w-[260px]'>
+                            <div key={todo._id} className={`border-2 border-gray-300 rounded-lg p-4 text-white bg-gray-800 min-w-[300px] sm:min-w-[300px] lg:min-w-[260px] ${id === todo._id ? "border-2 border-yellow-500" : "border-2 border-gray-300"}`}>
                                 <p className='font-bold text-2xl'>{todo.title}</p>
                                 <p>{todo.content}</p>
-                                <p className='mb-1'>Last updated: {new Date(todo.updatedAt).toLocaleString()}</p>
-                                <p>{todo._id}</p>
-                                <button onClick={() => editTodo(todo._id,index)}><FaEdit /></button>
-                                <button onClick={() => deleteTodo(todo._id)}><MdDelete /></button>
+                                <p className='mb-1'>Last updated: {todo.updatedAt ? new Date(todo.updatedAt).toLocaleString() : "N/A"}</p>
+                                <button onClick={() => editTodo(todo._id, index)}
+                                    aria-label='Edit Todo'
+                                    className='mx-2'
+                                    disabled={loading}
+                                >
+                                    <FaEdit />
+                                </button>
+                                <button onClick={() => deleteTodo(todo._id)}
+                                    aria-label='Delete Todo'
+                                    className='mx-2'
+                                    disabled={loading ? true : false}
+                                >
+                                    <MdDelete />
+                                </button>
                             </div>)
                         :
                         <div className='col-span-1 sm:col-span-2 lg:col-span-4 flex items-center justify-center'>
